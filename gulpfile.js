@@ -24,6 +24,7 @@ var paths = {
       'jquery.detectSwipe.js',
       'scrollfix.js',
       'fastclick.js',
+      'hammer.min.js',
       'sideburns.js'
     ].map(function(lib){ return 'src/js/thirdparty/' + lib }),
     allThirdparty: 'src/js/thirdparty/*.js'

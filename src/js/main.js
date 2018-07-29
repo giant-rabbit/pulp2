@@ -1,4 +1,4 @@
-/* globals $ _ Backbone alert FastClick ScrollFix Scale Element */
+/* globals $ _ Backbone alert ScrollFix Scale Element */
 (function () {
   'use strict'
 
@@ -228,9 +228,10 @@
         var format = formatState.format
 
         // Add listeners
-        pagesList.forEach(function ($page) {
+        for (var i = 0; i < pages.length; i++) {
+          $page = $('#page-' + pages[i].number)
           listeners.hotspotClicks($page, format)
-        })
+        }
         listeners.pageTransitions()
 
         // Secrets
@@ -663,8 +664,11 @@
     },
     hotspotClicks: function ($page, format) {
       // Set this to dblclick on mobile
-      $page.on(clickers[format], '.hotspot', function () {
-        routing.set.fromHotspotClick($(this))
+      $page.children('.hotspot').each(function (i, el) {
+        var hammertime = new Hammer(el);
+        hammertime.on('doubletap', function () {
+          routing.set.fromHotspotClick($(el))
+        })
       })
     },
     keyboardAndGestures: function () {
@@ -677,12 +681,17 @@
       })
 
       $(document).on('swipeleft', function (e) {
+        // TODO, add pan if zoomed in
+
         var direction = helpers.getNavDirection(e, 'swipeleft')
         routing.set.fromKeyboardOrGesture(direction)
       })
 
       $(document).on('swiperight', function (e) {
+        // TODO, add pan if zoomed in
+
         var direction = helpers.getNavDirection(e, 'swiperight')
+        console.log(direction);
         routing.set.fromKeyboardOrGesture(direction)
       })
 
@@ -1181,13 +1190,7 @@
 
           states.lastHotspot = pp_info.hotspot
 
-          // Send it to the appropriate function to transform the new page and hotspot locations
-          if ((format == 'mobile')) {
-          // if ((format == 'mobile' || settings.panelZoomMode == 'all-devices') && bookend == 'false') { /* DESKTOP_ZOOM_MODE */
-            leaf_to = 'hotspot'
-          } else {
-            leaf_to = 'page'
-          }
+          leaf_to = 'page'
 
           pp_info = leafing[direction][leaf_to](pp_info, hotspot_max, states.pages_max)
           // Add our new info to the hash
