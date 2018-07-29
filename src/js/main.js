@@ -67,6 +67,12 @@
     showNavHelpers: true
   }
 
+  var clickers = {
+    mobile: 'dblclick',
+    single: 'click',
+    double: 'click'
+  }
+
   var helpers = {
     setTransitionCss: function (property, value, transitionDuration) {
       var css = {}
@@ -198,16 +204,14 @@
       var $header_page_display = $('.header-item[data-which="page-number"]')
       $header_page_display.find('#pages-max').html(states.pages_max)
       $header_page_display.find('input').attr('max', states.pages_max)
+      var pagesList = [];
       for (var i = 0; i < pages.length; i++) {
         // For non-lazy loading of cover images
         _.extend(pages[i], {img_format: settings.imgFormat})
         page_markup = templates.pageFactory(pages[i])
         $('#pages').append(page_markup)
         $page = $('#page-' + pages[i].number)
-
-        // Add listeners
-        listeners.hotspotClicks($page)
-        listeners.pageTransitions()
+        pagesList.push($page);
       }
       // Set the z-index of the last page to 1000 so it can be on top of `#btns`
       $('#page-container-' + states.pages_max).css('z-index', '1000')
@@ -219,6 +223,15 @@
       layout.measurePageElements(function () {
         // Read the hash and navigate
         routing.init()
+
+        var formatState = state.get('format')
+        var format = formatState.format
+
+        // Add listeners
+        pagesList.forEach(function ($page) {
+          listeners.hotspotClicks($page, format)
+        })
+        listeners.pageTransitions()
 
         // Secrets
         // $('body').append('<img id="easter-egg-img" src="imgs/assets/spy.png"/>');
@@ -288,7 +301,6 @@
             $coverHoverMask.css('width', '')
           }
         }
-        console.log('height', img_height)
         // Apply the dimensions from the image to the wrapper
         // Apply a bit of a margin on pages_wrapper to accommodate the gutter
         var groups = [
@@ -649,12 +661,16 @@
         $('body').attr('data-state', zoom)
       })
     },
-    hotspotClicks: function ($page) {
-      $page.on('click', '.hotspot', function () {
+    hotspotClicks: function ($page, format) {
+      // Set this to dblclick on mobile
+      $page.on(clickers[format], '.hotspot', function () {
         routing.set.fromHotspotClick($(this))
       })
     },
     keyboardAndGestures: function () {
+      var formatState = state.get('format')
+      var format = formatState.format
+
       $('body').keydown(function (e) {
         var direction = helpers.getNavDirection(e, e.keyCode)
         routing.set.fromKeyboardOrGesture(direction)
@@ -688,7 +704,7 @@
         routing.set.fromKeyboardOrGesture(direction)
       })
 
-      $('#pages').on('click', '.mask', function () {
+      $('#pages').on(clickers[format], '.mask', function () {
         routing.set.fromHotspotClick($(this))
       })
 
