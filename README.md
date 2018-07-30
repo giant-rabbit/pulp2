@@ -140,6 +140,7 @@ Pulp can handle a variety of image formats. Here's [one thread](https://github.c
 * [Camille Bissuel](http://twitter.com/nylnook) — [Climate Change explained to Frogs, to Toads, to Batrachians Generally, and All Earthlings Who Might Feel a Little Concerned](http://nylnook.com/comics/climate-frogs)
 * Al Jazeera America — [Fare Game](http://projects.aljazeera.com/2015/12/fare-game)
 * Finnish Public Broadcaster Yle — ["Pakasteet pieneen pussiin?" - kielen alkeita sarjakuvan avulla](http://yle.fi/aihe/artikkeli/2016/10/25/pakasteet-pieneen-pussiin-kielen-alkeita-sarjakuvan-avulla), an amazing tri-lingual comic with audio to help people learn languages.
+* [iland comic](https://www.ilandcomic.co.uk/) by Nikos Tsouknidas and Rob Morgan - [Chapter 0: Clouds](https://www.ilandcomic.co.uk/chapters/0), [Chapter 1: Initiate](https://www.ilandcomic.co.uk/chapters/1).
 
 ## Customizing
 
