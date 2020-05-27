@@ -1,13 +1,25 @@
 /**
- * jquery.detectSwipe v2.1.1
+ * jquery.detectSwipe v2.1.3
  * jQuery Plugin to obtain touch gestures from iPhone, iPod Touch, iPad and Android
  * http://github.com/marcandre/detect_swipe
  * Based on touchwipe by Andreas Waltl, netCU Internetagentur (http://www.netcu.de)
  */
-(function($) {
+
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS
+        module.exports = factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function($) {
 
   $.detectSwipe = {
-    version: '2.1.1',
+    version: '2.1.2',
     enabled: 'ontouchstart' in document.documentElement,
     preventDefault: true,
     threshold: 20
@@ -24,33 +36,23 @@
   }
 
   function onTouchMove(e) {
-  	if ( $.detectSwipe.scrollExceptionCondition() ) { return false; }
-    if ( $.detectSwipe.preventDefault ) { e.preventDefault(); }
+    if ($.detectSwipe.preventDefault) { e.preventDefault(); }
     if(isMoving) {
       var x = e.touches[0].pageX;
       var y = e.touches[0].pageY;
       var dx = startX - x;
       var dy = startY - y;
       var dir;
-      var two_fingers = e.touches.length == 2;
-      var action;
-      if (!two_fingers){
-      	action = 'swipe';
-	      if(Math.abs(dx) >= $.detectSwipe.threshold) {
-	        dir = dx > 0 ? 'left' : 'right'
-	      }
-	      else if(Math.abs(dy) >= $.detectSwipe.threshold) {
-	        dir = dy > 0 ? 'down' : 'up'
-	      }
-      } else {
-      	action = 'pinch';
-      	// TODO, add directional detection
-      	// For Pulp, the action is the same whether you're pinching in or out
-      	dir = 'out';
+      var ratio = window.devicePixelRatio || 1;
+      if(Math.abs(dx) * ratio >= $.detectSwipe.threshold) {
+        dir = dx > 0 ? 'left' : 'right'
+      }
+      else if(Math.abs(dy) * ratio >= $.detectSwipe.threshold) {
+        dir = dy > 0 ? 'up' : 'down'
       }
       if(dir) {
         onTouchEnd.call(this);
-        $(this).trigger('swipe', dir).trigger(action + dir);
+        $(this).trigger('swipe', dir).trigger('swipe' + dir);
       }
     }
   }
@@ -66,7 +68,7 @@
   }
 
   function setup() {
-    this.addEventListener('touchstart', onTouchStart, false);
+    this.addEventListener && this.addEventListener('touchstart', onTouchStart, false);
   }
 
   function teardown() {
@@ -75,9 +77,9 @@
 
   $.event.special.swipe = { setup: setup };
 
-  $.each(['left', 'up', 'down', 'right', 'in', 'out'], function () {
+  $.each(['left', 'up', 'down', 'right'], function () {
     $.event.special['swipe' + this] = { setup: function(){
       $(this).on('swipe', $.noop);
     } };
   });
-})(jQuery);
+}));

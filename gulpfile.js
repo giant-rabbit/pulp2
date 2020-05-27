@@ -17,7 +17,7 @@ var paths = {
   js: {
     main: 'src/js/main.js',
     thirdparty: [
-      'jquery-1.11.0.min.js',
+      'jquery-3.5.1.min.js',
       'underscore-min.js',
       'backbone-min.js',
       'imagesloaded.pkgd.min.js',
@@ -71,5 +71,5 @@ gulp.task('watch', function() {
   gulp.watch([paths.gulpfile, paths.config, paths.css.styl, paths.js.main, paths.js.allThirdparty], ['compile-stylus', 'make-js-pkg'])
 });
 
-gulp.task('default', ['compile-stylus']); // Simply compile
-gulp.task('watch-files',   ['watch', 'compile-stylus', 'make-js-pkg', 'serve']); // Watch files for changes
+gulp.task('default', ['compile-stylus', 'make-js-pkg']); // Simply compile
+gulp.task('watch-files',   ['watch', 'compile-stylus', 'make-js-pkg']); // Watch files for changes

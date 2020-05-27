@@ -288,7 +288,6 @@
             $coverHoverMask.css('width', '')
           }
         }
-        console.log('height', img_height)
         // Apply the dimensions from the image to the wrapper
         // Apply a bit of a margin on pages_wrapper to accommodate the gutter
         var groups = [
@@ -1484,7 +1483,7 @@
           settings = $.extend(true, loadSettings.defaults, config)
           cb()
         })
-        .error(function (error) {
+        .fail(function (error) {
           if (error) {
             alert('Error loading config. File is either missing or the JSON is malformed. Try running `config.json` it through jsonlint.com: ' + JSON.stringify(error.message))
           }
@@ -1555,7 +1554,7 @@
           layout.bakePages(pages)
           layout.bakeEndnotes(endnotes)
         })
-        .error(function (error) {
+        .fail(function (error) {
           if (error) {
             alert('Error loading data. Data file is either missing or the JSON is malformed. Try running `pages.json` through jsonlint.com: ' + JSON.stringify(error.message))
           }
